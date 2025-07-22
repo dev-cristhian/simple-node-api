@@ -6,7 +6,7 @@ import { notFound } from "./utils/http.util.js";
 const server = http.createServer(async (request, response) => {
   const { url, method } = request;
 
-  const routeData = ROUTER.getRouteDate(url, method);
+  const routeData = ROUTER.getRouteData(url, method);
 
   if (!routeData) {
     notFound(response, { message: `Cannot ${method} / ${url}` });

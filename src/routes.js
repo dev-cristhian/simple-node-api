@@ -14,7 +14,7 @@ export const ROUTER = {
     },
   ],
 
-  getRouteDate: function (url, method) {
+  getRouteData: function (url, method) {
     return this.routes.find(
       (route) => route.url === url && route.method === method
     );
