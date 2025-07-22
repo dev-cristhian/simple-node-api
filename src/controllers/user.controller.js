@@ -7,7 +7,9 @@ import {
   ok,
 } from "../utils/http.util.js";
 export const USERS_CONTROLLER = {
-  getUser: async (_, response) => {
+  getUsers: async (request, response) => {
+    const { order } = request.query;
+
     try {
       const users = await new Promise((resolve) => {
         setTimeout(() => {
@@ -15,7 +17,19 @@ export const USERS_CONTROLLER = {
         }, 1000);
       });
 
-      ok(response, users);
+      if (!order || (order != "desc" && order != "asc")) {
+        ok(response, users);
+        return;
+      }
+
+      const sortedUsers = users.sort((prev, curr) => {
+        if (order === "desc") {
+          return prev.id < curr.id ? 1 : -1;
+        }
+        return prev.id > curr.id ? 1 : -1;
+      });
+
+      ok(response, sortedUsers);
     } catch (error) {
       internalServerError(response, error?.message);
     }

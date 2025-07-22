@@ -1,3 +1,4 @@
+import { URL } from "url";
 import { HTTP_STATUS_CODES } from "../constants/http.constant.js";
 
 function baseResponse(response, statusCode, data) {
@@ -61,4 +62,9 @@ export const getBody = (request) => {
       reject(error);
     });
   });
+};
+
+export const buildQueryParams = (request, url) => {
+  const parsedUrl = new URL(`https://${request.headers.host}${url}`);
+  return Object.fromEntries(parsedUrl.searchParams);
 };

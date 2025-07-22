@@ -5,7 +5,7 @@ export const ROUTER = {
     {
       url: "/users",
       method: "GET",
-      handler: USERS_CONTROLLER.getUser,
+      handler: USERS_CONTROLLER.getUsers,
     },
     {
       url: "/users",
@@ -16,7 +16,7 @@ export const ROUTER = {
 
   getRouteData: function (url, method) {
     return this.routes.find(
-      (route) => route.url === url && route.method === method
+      (route) => route.url === url.split("?")[0] && route.method === method
     );
   },
 };
