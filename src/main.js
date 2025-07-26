@@ -2,7 +2,7 @@ import http from "http";
 
 import { ROUTER } from "./routes.js";
 import { HttpRequestBuilder } from "./shared/http/http-request-builder.js";
-import { notFound } from "./utils/http.util.js";
+import { HttpResponseBuilder } from "./shared/http/http-response-builder.js";
 
 const server = http.createServer(async (request, response) => {
   const httpRequestBuilder = new HttpRequestBuilder(request);
@@ -13,7 +13,9 @@ const server = http.createServer(async (request, response) => {
   const routeData = ROUTER.getRouteData(request);
 
   if (!routeData) {
-    notFound(response, { message: `Cannot ${method} / ${url}` });
+    HttpResponseBuilder.notFound(response, {
+      message: `Cannot ${method} / ${url}`,
+    });
     return;
   }
 

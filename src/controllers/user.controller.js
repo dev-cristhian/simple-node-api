@@ -1,10 +1,5 @@
 import { USERS_MOCK } from "../mocks/users.mock.js";
-import {
-  badRequest,
-  created,
-  internalServerError,
-  ok,
-} from "../utils/http.util.js";
+import { HttpResponseBuilder } from "../shared/http/http-response-builder.js";
 export const USERS_CONTROLLER = {
   getUsers: async (request, response) => {
     const { order } = request.query;
@@ -17,7 +12,7 @@ export const USERS_CONTROLLER = {
       });
 
       if (!order || (order != "desc" && order != "asc")) {
-        ok(response, users);
+        HttpResponseBuilder.ok(response, users);
         return;
       }
 
@@ -28,9 +23,9 @@ export const USERS_CONTROLLER = {
         return prev.id > curr.id ? 1 : -1;
       });
 
-      ok(response, sortedUsers);
+      HttpResponseBuilder.ok(response, sortedUsers);
     } catch (error) {
-      internalServerError(response, error?.message);
+      HttpResponseBuilder.internalServerError(response, error?.message);
     }
   },
 
@@ -39,10 +34,10 @@ export const USERS_CONTROLLER = {
 
     const user = USERS_MOCK.find((user) => +user.id === +id);
     if (!user) {
-      return badRequest(response, "User not found.");
+      return HttpResponseBuilder.badRequest(response, "User not found.");
     }
 
-    ok(response, user);
+    HttpResponseBuilder.ok(response, user);
   },
 
   createUser: async (request, response) => {
@@ -50,7 +45,10 @@ export const USERS_CONTROLLER = {
     const { name, email, age } = body;
 
     if (!name || !email || !age) {
-      return badRequest(response, "Name, email, and age are required fields.");
+      return HttpResponseBuilder.badRequest(
+        response,
+        "Name, email, and age are required fields."
+      );
     }
 
     try {
@@ -65,9 +63,9 @@ export const USERS_CONTROLLER = {
         }, 1000);
       });
 
-      created(response, newUser);
+      HttpResponseBuilder.created(response, newUser);
     } catch (error) {
-      internalServerError(response, error?.message);
+      HttpResponseBuilder.internalServerError(response, error?.message);
     }
   },
 };
