@@ -1,4 +1,3 @@
-import { URL } from "url";
 import { HTTP_STATUS_CODES } from "../constants/http.constant.js";
 
 function baseResponse(response, statusCode, data) {
@@ -44,37 +43,3 @@ export const internalServerError = (response, error) =>
     message: "Internal Server Error",
     error,
   });
-
-export const getBody = (request) => {
-  return new Promise((resolve, reject) => {
-    let body = "";
-    request.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-    request.on("end", () => {
-      try {
-        resolve(JSON.parse(body));
-      } catch (error) {
-        reject(error);
-      }
-    });
-    request.on("error", (error) => {
-      reject(error);
-    });
-  });
-};
-
-const baseUrl = (request, url) =>
-  new URL(`https://${request.headers.host}${url}`);
-
-export const buildQueryParams = (request, url) => {
-  const parsedUrl = baseUrl(request, url);
-  return Object.fromEntries(parsedUrl.searchParams);
-};
-
-export const getParamByPathName = (request, url) => {
-  const parsedUrl = baseUrl(request, url);
-  const pathname = parsedUrl.pathname;
-  const splitPath = pathname.split("/").filter(Boolean);
-  return splitPath[splitPath.length - 1] || null;
-};

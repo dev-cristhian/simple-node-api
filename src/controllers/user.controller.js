@@ -2,7 +2,6 @@ import { USERS_MOCK } from "../mocks/users.mock.js";
 import {
   badRequest,
   created,
-  getBody,
   internalServerError,
   ok,
 } from "../utils/http.util.js";
@@ -36,7 +35,7 @@ export const USERS_CONTROLLER = {
   },
 
   getUserById: async (request, response) => {
-    const id = request?.params;
+    const id = request?.param;
 
     const user = USERS_MOCK.find((user) => +user.id === +id);
     if (!user) {
@@ -47,7 +46,7 @@ export const USERS_CONTROLLER = {
   },
 
   createUser: async (request, response) => {
-    const body = await getBody(request);
+    const body = request.body || {};
     const { name, email, age } = body;
 
     if (!name || !email || !age) {

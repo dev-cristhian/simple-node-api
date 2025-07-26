@@ -1,16 +1,14 @@
 import http from "http";
 
 import { ROUTER } from "./routes.js";
-import {
-  buildQueryParams,
-  getParamByPathName,
-  notFound,
-} from "./utils/http.util.js";
+import { HttpRequestBuilder } from "./shared/http/http-request-builder.js";
+import { notFound } from "./utils/http.util.js";
 
 const server = http.createServer(async (request, response) => {
+  const httpRequestBuilder = new HttpRequestBuilder(request);
+  request = await httpRequestBuilder.buildAsync();
+
   const { url, method } = request;
-  request.query = buildQueryParams(request, url);
-  request.params = getParamByPathName(request, url);
 
   const routeData = ROUTER.getRouteData(request);
 
