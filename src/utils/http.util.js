@@ -64,7 +64,17 @@ export const getBody = (request) => {
   });
 };
 
+const baseUrl = (request, url) =>
+  new URL(`https://${request.headers.host}${url}`);
+
 export const buildQueryParams = (request, url) => {
-  const parsedUrl = new URL(`https://${request.headers.host}${url}`);
+  const parsedUrl = baseUrl(request, url);
   return Object.fromEntries(parsedUrl.searchParams);
+};
+
+export const getParamByPathName = (request, url) => {
+  const parsedUrl = baseUrl(request, url);
+  const pathname = parsedUrl.pathname;
+  const splitPath = pathname.split("/").filter(Boolean);
+  return splitPath[splitPath.length - 1] || null;
 };

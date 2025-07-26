@@ -1,13 +1,18 @@
 import http from "http";
 
 import { ROUTER } from "./routes.js";
-import { buildQueryParams, notFound } from "./utils/http.util.js";
+import {
+  buildQueryParams,
+  getParamByPathName,
+  notFound,
+} from "./utils/http.util.js";
 
 const server = http.createServer(async (request, response) => {
   const { url, method } = request;
   request.query = buildQueryParams(request, url);
+  request.params = getParamByPathName(request, url);
 
-  const routeData = ROUTER.getRouteData(url, method);
+  const routeData = ROUTER.getRouteData(request);
 
   if (!routeData) {
     notFound(response, { message: `Cannot ${method} / ${url}` });

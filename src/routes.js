@@ -8,15 +8,34 @@ export const ROUTER = {
       handler: USERS_CONTROLLER.getUsers,
     },
     {
+      url: "/users/:id",
+      method: "GET",
+      handler: USERS_CONTROLLER.getUserById,
+    },
+    {
       url: "/users",
       method: "POST",
       handler: USERS_CONTROLLER.createUser,
     },
   ],
 
-  getRouteData: function (url, method) {
-    return this.routes.find(
-      (route) => route.url === url.split("?")[0] && route.method === method
-    );
+  getRouteData(request) {
+    const { url, method } = request;
+    if (!url || !method) return null;
+
+    const normalizedUrl = url.split("?")[0].replace(/\/+$/, "");
+
+    return this.routes.find((route) => {
+      const routeParts = route.url.split("/").filter(Boolean);
+      const urlParts = normalizedUrl.split("/").filter(Boolean);
+
+      if (route.method !== method || routeParts.length !== urlParts.length) {
+        return false;
+      }
+
+      return routeParts.every((part, index) => {
+        return part.startsWith(":") || part === urlParts[index];
+      });
+    });
   },
 };

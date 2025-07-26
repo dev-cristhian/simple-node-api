@@ -35,6 +35,17 @@ export const USERS_CONTROLLER = {
     }
   },
 
+  getUserById: async (request, response) => {
+    const id = request?.params;
+
+    const user = USERS_MOCK.find((user) => +user.id === +id);
+    if (!user) {
+      return badRequest(response, "User not found.");
+    }
+
+    ok(response, user);
+  },
+
   createUser: async (request, response) => {
     const body = await getBody(request);
     const { name, email, age } = body;
