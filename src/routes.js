@@ -15,4 +15,14 @@ export const ROUTES = [
     method: "POST",
     handler: USERS_CONTROLLER.createUser,
   },
+  {
+    url: "/users/:id",
+    method: "PUT",
+    handler: USERS_CONTROLLER.updateUser,
+  },
+  {
+    url: "/users/:id",
+    method: "DELETE",
+    handler: USERS_CONTROLLER.deleteUser,
+  },
 ];
